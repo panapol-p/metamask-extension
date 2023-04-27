@@ -1,12 +1,18 @@
 const { strict: assert } = require('assert');
+// const {
+//   convertToHexValue,
+//   withFixtures,
+//   openDapp,
+//   setupPhishingDetectionMocks,
+//   mockPhishingDetection,
+// } = require('../helpers');
+const { convertToHexValue, withFixtures } = require('../../helpers');
+const FixtureBuilder = require('../../fixture-builder');
 const {
-  convertToHexValue,
-  withFixtures,
-  openDapp,
-  setupPhishingDetectionMocks,
-  mockPhishingDetection,
-} = require('../helpers');
-const FixtureBuilder = require('../fixture-builder');
+  METAMASK_HOTLIST_DIFF_URL,
+  METAMASK_STALELIST_URL,
+} = require('./helpers');
+const { setupPhishingDetectionMocks } = require('./helpers');
 
 describe('Phishing Detection', function () {
   const ganacheOptions = {
@@ -18,6 +24,20 @@ describe('Phishing Detection', function () {
       },
     ],
   };
+
+  describe('Phishing Detection Mock', function () {
+    it('should be updated to use v1 of the API', function () {
+      // Update the fixture in phishing-detection/helpers.js if this test fails
+      assert.equal(
+        METAMASK_STALELIST_URL,
+        'https://phishing-detection.metafi.codefi.network/v1/stalelist',
+      );
+      assert.equal(
+        METAMASK_HOTLIST_DIFF_URL,
+        'https://phishing-detection.metafi.codefi.network/v1/diffsSince',
+      );
+    });
+  });
 
   it('should display the MetaMask Phishing Detection page and take the user to the blocked page if they continue', async function () {
     await withFixtures(
@@ -149,12 +169,18 @@ describe('Phishing Detection', function () {
   });
 
   it('should navigate the user to eth-phishing-detect to dispute a block from MetaMask', async function () {
+    const metamaskBlockedDomain = new URL('https://phishing-test.ellul.dev');
+
     await withFixtures(
       {
         fixtures: new FixtureBuilder().build(),
         ganacheOptions,
         title: this.test.title,
-        testSpecificMock: mockPhishingDetection,
+        testSpecificMock: (mockServer) => {
+          setupPhishingDetectionMocks(mockServer, {
+            blocklist: [metamaskBlockedDomain.host],
+          });
+        },
         dapp: true,
         failOnConsoleError: false,
       },
@@ -163,6 +189,7 @@ describe('Phishing Detection', function () {
         await driver.fill('#password', 'correct horse battery staple');
         await driver.press('#password', driver.Key.ENTER);
         await openDapp(driver);
+        await driver.openNewPage(metamaskBlockedDomain.origin);
 
         await driver.clickElement({ text: 'report a detection problem.' });
 
@@ -176,24 +203,14 @@ describe('Phishing Detection', function () {
     );
   });
 
-  it('should navigate the user to PhishFort to dispute a block from MetaMask', async function () {
+  it('should navigate the user to PhishFort to dispute a block NOT by MetaMask', async function () {
     await withFixtures(
       {
         fixtures: new FixtureBuilder().build(),
         ganacheOptions,
         title: this.test.title,
         testSpecificMock: (mockServer) => {
-          setupPhishingDetectionMocks(mockServer, {
-            statusCode: 200,
-            json: {
-              version: 2,
-              tolerance: 2,
-              fuzzylist: [],
-              whitelist: [],
-              blacklist: [],
-              lastUpdated: 0,
-            },
-          });
+          setupPhishingDetectionMocks(mockServer);
         },
         dapp: true,
         failOnConsoleError: false,
