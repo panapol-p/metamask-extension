@@ -130,7 +130,7 @@ describe('MetaMaskController', function () {
       // Update the fixture above if this test fails
       assert.equal(
         METAMASK_STALELIST_URL,
-        'https://https://phishing-detection.metafi.codefi.network/v1/stalelist',
+        'https://phishing-detection.metafi.codefi.network/v1/stalelist',
       );
       assert.equal(
         METAMASK_HOTLIST_DIFF_URL,
