@@ -1869,9 +1869,6 @@
   "importTokenWarning": {
     "message": "Anyone can create a token with any name, including fake versions of existing tokens. Add and trade at your own risk!"
   },
-  "importTokens": {
-    "message": "import tokens"
-  },
   "importTokensCamelCase": {
     "message": "Import tokens"
   },
@@ -2251,9 +2248,6 @@
   },
   "missingSettingRequest": {
     "message": "Request here"
-  },
-  "missingToken": {
-    "message": "Don't see your token?"
   },
   "mmiAddToken": {
     "message": "The page at $1 would like to authorise the following custodian token in MetaMask Institutional"
