@@ -3419,9 +3419,6 @@
   "status": {
     "message": "ステータス"
   },
-  "statusConnected": {
-    "message": "接続済み"
-  },
   "statusNotConnected": {
     "message": "未接続"
   },

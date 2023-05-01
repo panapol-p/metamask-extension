@@ -3419,9 +3419,6 @@
   "status": {
     "message": "状态"
   },
-  "statusConnected": {
-    "message": "已连接"
-  },
   "statusNotConnected": {
     "message": "未连接"
   },

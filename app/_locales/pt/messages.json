@@ -3419,9 +3419,6 @@
   "status": {
     "message": "Status"
   },
-  "statusConnected": {
-    "message": "Conectado"
-  },
   "statusNotConnected": {
     "message": "Não conectado"
   },

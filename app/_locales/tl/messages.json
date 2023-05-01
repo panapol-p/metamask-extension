@@ -3419,9 +3419,6 @@
   "status": {
     "message": "Istado"
   },
-  "statusConnected": {
-    "message": "Nakakonekta"
-  },
   "statusNotConnected": {
     "message": "Hindi konektado"
   },
