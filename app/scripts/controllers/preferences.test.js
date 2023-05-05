@@ -305,4 +305,24 @@ describe('preferences controller', function () {
       );
     });
   });
+
+  describe('ledgerTransportType', function () {
+    it('default should be u2f if browser is firefox', function () {
+      const state = preferencesController.store.getState();
+      assert.equal(state.ledgerTransportType, 'u2f');
+    });
+
+    it('should set ledgerTransportType to webhid if browser is chrome', function () {
+      // mocks that the navgiator object has a hid property
+      global.navigator.hid = 'hid';
+      const localPreferenceController = new PreferencesController({
+        initLangCode: 'en_US',
+        tokenListController,
+        onInfuraIsBlocked: sinon.spy(),
+        onInfuraIsUnblocked: sinon.spy(),
+      });
+      const state = localPreferenceController.store.getState();
+      assert.equal(state.ledgerTransportType, 'webhid');
+    });
+  });
 });
