@@ -89,20 +89,17 @@ exports[`Account Menu Render Content should not render keyring label if keyring 
               Account 1
             </div>
             <div
-              class="currency-display-component account-menu__balance"
+              class="box currency-display-component account-menu__balance box--display-flex box--flex-direction-row box--flex-wrap-wrap box--align-items-center"
               data-testid="account-menu__balance"
               title="0 ETH"
             >
               <span
-                class="currency-display-component__prefix"
-              />
-              <span
-                class="currency-display-component__text"
+                class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
               >
                 0
               </span>
               <span
-                class="currency-display-component__suffix"
+                class="box mm-text currency-display-component__suffix mm-text--body-md box--margin-inline-start-1 box--flex-direction-row box--color-text-default"
               >
                 ETH
               </span>
@@ -169,20 +166,17 @@ exports[`Account Menu Render Content should not render keyring label if keyring 
               Imported Account 1
             </div>
             <div
-              class="currency-display-component account-menu__balance"
+              class="box currency-display-component account-menu__balance box--display-flex box--flex-direction-row box--flex-wrap-wrap box--align-items-center"
               data-testid="account-menu__balance"
               title="0 ETH"
             >
               <span
-                class="currency-display-component__prefix"
-              />
-              <span
-                class="currency-display-component__text"
+                class="box mm-text currency-display-component__text mm-text--body-md box--flex-direction-row box--color-text-default"
               >
                 0
               </span>
               <span
-                class="currency-display-component__suffix"
+                class="box mm-text currency-display-component__suffix mm-text--body-md box--margin-inline-start-1 box--flex-direction-row box--color-text-default"
               >
                 ETH
               </span>
