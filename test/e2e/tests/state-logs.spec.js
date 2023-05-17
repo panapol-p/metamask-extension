@@ -45,8 +45,10 @@ describe('State logs', function () {
         await driver.press('#password', driver.Key.ENTER);
 
         // Download state logs
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Settings', tag: 'div' });
+        await driver.clickElement(
+          '[data-testid="account-options-menu-button"]',
+        );
+        await driver.clickElement({ text: 'Settings', tag: 'button' });
         await driver.clickElement({ text: 'Advanced', tag: 'div' });
         await driver.clickElement({
           text: 'Download state logs',
