@@ -36,13 +36,15 @@ describe('Add account', function () {
         await driver.fill('#password', 'correct horse battery staple');
         await driver.press('#password', driver.Key.ENTER);
 
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '[data-testid="multichain-account-menu-add-account"]',
+        );
+
         await driver.fill('.new-account-create-form input', '2nd account');
         await driver.clickElement({ text: 'Create', tag: 'button' });
-
         const accountName = await driver.waitForSelector({
-          css: '.selected-account__name',
+          css: '[data-testid="account-menu-icon"]',
           text: '2nd',
         });
         assert.equal(await accountName.getText(), '2nd account');
@@ -67,65 +69,72 @@ describe('Add account', function () {
           testPassword,
         );
 
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '[data-testid="multichain-account-menu-add-account"]',
+        );
+
         await driver.fill('.new-account-create-form input', '2nd account');
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
+        // Open account menu again
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+
+        // Select account details for second account
         await driver.clickElement(
-          '[data-testid="account-options-menu-button"]',
-        );
-        await driver.clickElement(
-          '[data-testid="account-options-menu__account-details"]',
+          '.multichain-account-list-item--selected [data-testid="account-list-item-menu-button"]',
         );
 
-        const detailsModal = await driver.findVisibleElement('span .modal');
+        await driver.clickElement('[data-testid="account-list-menu-details"]');
+
+        await driver.findVisibleElement('.popover-bg');
+
         // get the public address for the "second account"
-        await driver.waitForSelector('.qr-code__address');
+        await driver.waitForSelector('.multichain-address-copy-button');
         const secondAccountAddress = await driver.findElement({
           text: secondAccount,
-          tag: 'div',
+          tag: 'button',
         });
-        const secondAccountPublicAddress = await secondAccountAddress.getText();
 
-        await driver.clickElement('.account-modal__close');
-        await detailsModal.waitForElementState('hidden');
+        const secondAccountPublicAddress = await secondAccountAddress.getText();
+        await driver.clickElement('button[aria-label="Close"]');
 
         // generate a third accound
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '[data-testid="multichain-account-menu-add-account"]',
+        );
+
         await driver.fill('.new-account-create-form input', '3rd account');
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
+        // Open account menu again
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+
+        // Select account details for third account
+        await driver.clickElement(
+          '.multichain-account-list-item--selected [data-testid="account-list-item-menu-button"]',
+        );
+
+        await driver.clickElement('[data-testid="account-list-menu-details"]');
+
+        // get the public address for the "third account"
+        await driver.waitForSelector('.multichain-address-copy-button');
+        const thirdAccountAddress = await driver.findElement({
+          text: thirdAccount,
+          tag: 'button',
+        });
+
+        const thirdAccountPublicAddress = await thirdAccountAddress.getText();
+        await driver.clickElement('button[aria-label="Close"]');
+
+        // lock account
         await driver.clickElement(
           '[data-testid="account-options-menu-button"]',
         );
-        await driver.clickElement(
-          '[data-testid="account-options-menu__account-details"]',
-        );
-
-        // get the public address for the "third account"
-        const secondDetailsModal = await driver.findVisibleElement(
-          'span .modal',
-        );
-        await driver.waitForSelector('.qr-code__address');
-        const thirdAccountAddress = await driver.findElement({
-          text: thirdAccount,
-          tag: 'div',
-        });
-        const thirdAccountPublicAddress = await thirdAccountAddress.getText();
-
-        await driver.clickElement('.account-modal__close');
-        await secondDetailsModal.waitForElementState('hidden');
-
-        // lock account
-        await driver.clickElement('.account-menu__icon');
         await driver.delay(regularDelayMs);
 
-        const lockButton = await driver.findClickableElement(
-          '.account-menu__lock-button',
-        );
-        await lockButton.click();
+        await driver.clickElement('[data-testid="global-menu-lock"]');
         await driver.delay(regularDelayMs);
 
         // restore same seed phrase
@@ -134,6 +143,7 @@ describe('Add account', function () {
         );
 
         await restoreSeedLink.click();
+
         await driver.delay(regularDelayMs);
 
         await driver.pasteIntoField(
@@ -150,51 +160,58 @@ describe('Add account', function () {
         await driver.delay(regularDelayMs);
 
         // recreate a "2nd account"
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '[data-testid="multichain-account-menu-add-account"]',
+        );
         await driver.fill('.new-account-create-form input', '2nd account');
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
+        // Open account menu again
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        // Select account details for second account
         await driver.clickElement(
-          '[data-testid="account-options-menu-button"]',
+          '.multichain-account-list-item--selected [data-testid="account-list-item-menu-button"]',
         );
-        await driver.clickElement(
-          '[data-testid="account-options-menu__account-details"]',
-        );
-        const thirdDetailsModal = await driver.findVisibleElement(
-          'span .modal',
-        );
+
+        await driver.clickElement('[data-testid="account-list-menu-details"]');
+
+        await driver.findVisibleElement('.popover-bg');
         // get the public address for the "second account"
-        await driver.waitForSelector('.qr-code__address');
+        await driver.waitForSelector('.multichain-address-copy-button');
         const recreatedSecondAccountAddress = await driver.findElement({
           text: secondAccount,
-          tag: 'div',
+          tag: 'button',
         });
+
         assert.equal(
           await recreatedSecondAccountAddress.getText(),
           secondAccountPublicAddress,
         );
-
-        await driver.clickElement('.account-modal__close');
-        await thirdDetailsModal.waitForElementState('hidden');
+        await driver.clickElement('button[aria-label="Close"]');
 
         // re-generate a third accound
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '[data-testid="multichain-account-menu-add-account"]',
+        );
+
         await driver.fill('.new-account-create-form input', '3rd account');
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
+        // Open account menu again
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        // Select account details for third account
         await driver.clickElement(
-          '[data-testid="account-options-menu-button"]',
+          '.multichain-account-list-item--selected [data-testid="account-list-item-menu-button"]',
         );
-        await driver.clickElement(
-          '[data-testid="account-options-menu__account-details"]',
-        );
+        await driver.clickElement('[data-testid="account-list-menu-details"]');
 
         // get the public address for the "third account"
+        await driver.waitForSelector('.multichain-address-copy-button');
         const recreatedThirdAccountAddress = await driver.findElement({
           text: thirdAccount,
-          tag: 'div',
+          tag: 'button',
         });
         assert.strictEqual(
           await recreatedThirdAccountAddress.getText(),
@@ -221,24 +238,30 @@ describe('Add account', function () {
 
         await driver.delay(regularDelayMs);
 
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+
+        await driver.clickElement(
+          '[data-testid="multichain-account-menu-add-account"]',
+        );
         await driver.fill('.new-account-create-form input', '2nd account');
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
+        // Open account menu again
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+
+        // Show account list menu for second account
         await driver.clickElement(
-          '[data-testid="account-options-menu-button"]',
+          '.multichain-account-list-item--selected [data-testid="account-list-item-menu-button"]',
         );
 
         const menuItems = await driver.findElements('.menu-item');
-        assert.equal(menuItems.length, 3);
+        assert.equal(menuItems.length, 2);
 
         // click out of menu
         await driver.clickElement('.menu__background');
 
         // import with private key
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Import account', tag: 'div' });
+        await driver.clickElement({ text: 'Import account', tag: 'button' });
 
         // enter private key',
         await driver.fill('#private-key-box', testPrivateKey);
@@ -246,20 +269,22 @@ describe('Add account', function () {
 
         // should show the correct account name
         const importedAccountName = await driver.findElement(
-          '.selected-account__name',
+          '[data-testid="account-menu-icon"]',
         );
         assert.equal(await importedAccountName.getText(), 'Account 3');
 
+        // Open account menu again
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+
+        // Show account list menu for second account
         await driver.clickElement(
-          '[data-testid="account-options-menu-button"]',
+          '.multichain-account-list-item--selected [data-testid="account-list-item-menu-button"]',
         );
 
-        const menuItems2 = await driver.findElements('.menu-item');
-        assert.equal(menuItems2.length, 4);
+        const importedMenuItems = await driver.findElements('.menu-item');
+        assert.equal(importedMenuItems.length, 3);
 
-        await driver.findElement(
-          '[data-testid="account-options-menu__remove-account"]',
-        );
+        await driver.findElement('[data-testid="account-list-menu-remove"]');
       },
     );
   });
