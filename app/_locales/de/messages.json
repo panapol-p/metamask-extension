@@ -3202,9 +3202,6 @@
   "showHexDataDescription": {
     "message": "Wählen Sie dies aus, um das Hexdatenfeld auf dem Senden-Bildschirm anzuzeigen"
   },
-  "showHide": {
-    "message": "Ein-/Ausblenden"
-  },
   "showIncomingTransactions": {
     "message": "Eingehende Transaktionen anzeigen"
   },
@@ -3911,10 +3908,6 @@
   },
   "toggleEthSignField": {
     "message": "eth_sign-Anfragen ein- oder ausschalten"
-  },
-  "toggleTestNetworks": {
-    "message": "$1 Test-Netzwerke",
-    "description": "$1 is a clickable link with text defined by the 'showHide' key. The link will open Settings > Advanced where users can enable the display of test networks in the network dropdown."
   },
   "token": {
     "message": "Token"

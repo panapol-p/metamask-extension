@@ -3202,9 +3202,6 @@
   "showHexDataDescription": {
     "message": "Pilih ini untuk menampilkan bidang data hex di layar kirim"
   },
-  "showHide": {
-    "message": "Tampil/Sembunyi"
-  },
   "showIncomingTransactions": {
     "message": "Tampilkan transaksi masuk"
   },
@@ -3911,10 +3908,6 @@
   },
   "toggleEthSignField": {
     "message": "Alihkan permintaan eth_sign"
-  },
-  "toggleTestNetworks": {
-    "message": "$1 jaringan pengujian",
-    "description": "$1 is a clickable link with text defined by the 'showHide' key. The link will open Settings > Advanced where users can enable the display of test networks in the network dropdown."
   },
   "token": {
     "message": "Token"
