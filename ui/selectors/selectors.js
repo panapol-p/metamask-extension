@@ -571,7 +571,7 @@ export function getSuggestedTokens(state) {
   return (
     Object.values(state.metamask.pendingApprovals)?.filter(
       ({ type, requestData: { asset } }) => {
-        return type === ApprovalType.WatchAsset && asset.standard === ERC20;
+        return type === ApprovalType.WatchAsset && asset.tokenId === undefined;
       },
     ) || []
   );
