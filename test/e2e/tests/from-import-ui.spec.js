@@ -43,29 +43,31 @@ describe('MetaMask Import UI', function () {
         );
 
         // Show account information
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '[data-testid="account-list-item-menu-button"]',
+        );
+        await driver.clickElement('[data-testid="account-list-menu-details"');
+        await driver.findVisibleElement('.qr-code__wrapper');
+
+        // shows a QR code for the account
+        await driver.findVisibleElement('.popover-container');
+        // shows the correct account address
+        const address = await driver.findElement(
+          '.multichain-address-copy-button',
+        );
+        assert.equal(await address.getText(), testAddress);
+
+        await driver.clickElement('[data-testid="popover-close"]');
+
+        // logs out of the account
         await driver.clickElement(
           '[data-testid="account-options-menu-button"]',
         );
-        await driver.clickElement(
-          '[data-testid="account-options-menu__account-details"]',
-        );
-        await driver.findVisibleElement('.qr-code__wrapper');
-        // shows a QR code for the account
-        const detailsModal = await driver.findVisibleElement('span .modal');
-        // shows the correct account address
-        const address = await driver.findElement('.qr-code__address');
-
-        assert.equal(await address.getText(), testAddress);
-
-        await driver.clickElement('.account-modal__close');
-        await detailsModal.waitForElementState('hidden');
-
-        // logs out of the account
-        await driver.clickElement('.account-menu__icon .identicon');
         const lockButton = await driver.findClickableElement(
-          '.account-menu__lock-button',
+          '[data-testid="global-menu-lock"]',
         );
-        assert.equal(await lockButton.getText(), 'Lock');
+        assert.equal(await lockButton.getText(), 'Lock MetaMask');
         await lockButton.click();
 
         // accepts the account password after lock
@@ -75,12 +77,12 @@ describe('MetaMask Import UI', function () {
         // Create a new account
         // switches to localhost
         await driver.delay(largeDelayMs);
-        await driver.clickElement('.network-display');
+        await driver.clickElement('[data-testid="network-display"]');
         await driver.clickElement({ text: 'Localhost', tag: 'span' });
 
         // choose Create account from the account menu
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement({ text: 'Create account', tag: 'div' });
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement({ text: 'Add account', tag: 'div' });
 
         // set account name
         await driver.fill('.new-account-create-form input', '2nd account');
@@ -88,13 +90,17 @@ describe('MetaMask Import UI', function () {
         await driver.clickElement({ text: 'Create', tag: 'button' });
 
         // should show the correct account name
-        const accountName = await driver.findElement('.selected-account__name');
+        const accountName = await driver.findElement(
+          '[data-testid="account-menu-icon"]',
+        );
         assert.equal(await accountName.getText(), '2nd account');
 
         // Switch back to original account
         // chooses the original account from the account menu
-        await driver.clickElement('.account-menu__icon');
-        await driver.clickElement('.account-menu__name');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
+        await driver.clickElement(
+          '.multichain-account-list-item__account-name__button',
+        );
 
         // Send ETH from inside MetaMask
         // starts a send transaction
@@ -161,15 +167,16 @@ describe('MetaMask Import UI', function () {
         );
 
         // Show account information
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         await driver.clickElement(
-          '[data-testid="account-options-menu-button"]',
+          '[data-testid="account-list-item-menu-button"]',
         );
-        await driver.clickElement(
-          '[data-testid="account-options-menu__account-details"]',
-        );
+        await driver.clickElement('[data-testid="account-list-menu-details"');
         await driver.findVisibleElement('.qr-code__wrapper');
         // shows the correct account address
-        const address = await driver.findElement('.qr-code__address');
+        const address = await driver.findElement(
+          '[data-testid="address-copy-button-text"]',
+        );
 
         assert.equal(await address.getText(), testAddress);
       },
@@ -207,7 +214,7 @@ describe('MetaMask Import UI', function () {
 
         // Imports an account with private key
         // choose Create account from the account menu
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         await driver.clickElement({ text: 'Import account', tag: 'div' });
 
         // enter private key',
@@ -216,21 +223,22 @@ describe('MetaMask Import UI', function () {
 
         // should show the correct account name
         const importedAccountName = await driver.findElement(
-          '.selected-account__name',
+          '[data-testid="account-menu-icon"]',
         );
         assert.equal(await importedAccountName.getText(), 'Account 4');
 
         // should show the imported label
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         // confirm 4th account is account 4, as expected
-        const accountMenuItemSelector = '.account-menu__account:nth-child(4)';
+        const accountMenuItemSelector =
+          '.multichain-account-list-item:nth-child(4)';
         const fourthAccountName = await driver.findElement(
-          `${accountMenuItemSelector} .account-menu__name`,
+          `${accountMenuItemSelector} .multichain-account-list-item__account-name__button`,
         );
         assert.equal(await fourthAccountName.getText(), 'Account 4');
         // confirm label is present on the same menu item
         const importedLabel = await driver.findElement(
-          `${accountMenuItemSelector} .keyring-label`,
+          `${accountMenuItemSelector} .mm-tag`,
         );
         assert.equal(await importedLabel.getText(), 'IMPORTED');
 
@@ -243,40 +251,40 @@ describe('MetaMask Import UI', function () {
 
         // should see new account in account menu
         const importedAccount2Name = await driver.findElement(
-          '.selected-account__name',
+          '[data-testid="account-menu-icon"]',
         );
         assert.equal(await importedAccount2Name.getText(), 'Account 5');
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         const accountListItems = await driver.findElements(
-          '.account-menu__account',
+          'multichain-account-list-item',
         );
         assert.equal(accountListItems.length, 5);
 
-        await driver.clickPoint('.account-menu__icon', 0, 0);
+        await driver.clickElement('[data-testid="account-menu-icon"]');
 
         // should open the remove account modal
         await driver.clickElement(
           '[data-testid="account-options-menu-button"]',
         );
         await driver.clickElement(
-          '[data-testid="account-options-menu__remove-account"]',
+          await driver.findElements('.account-list-item-menu-button')[4],
         );
-        await driver.findElement('.confirm-remove-account__account');
+        await driver.findElement('[data-testid="account-list-menu-remove"]');
 
         // should remove the account
         await driver.clickElement({ text: 'Remove', tag: 'button' });
 
         // Wait until selected account switches away from removed account to first account
         await driver.waitForSelector({
-          css: '.selected-account__name',
+          css: '[data-testid="account-menu-icon"]',
           text: 'Account 1',
         });
 
         await driver.delay(regularDelayMs);
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
 
         const accountListItemsAfterRemoval = await driver.findElements(
-          '.account-menu__account',
+          '.multichain-account-list-item',
         );
         assert.equal(accountListItemsAfterRemoval.length, 4);
       },
@@ -309,7 +317,7 @@ describe('MetaMask Import UI', function () {
         await driver.press('#password', driver.Key.ENTER);
 
         // Imports an account with JSON file
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         await driver.clickElement({ text: 'Import account', tag: 'div' });
 
         await driver.clickElement('.dropdown__select');
@@ -331,26 +339,27 @@ describe('MetaMask Import UI', function () {
 
         // should show the correct account name
         const importedAccountName = await driver.findElement(
-          '.selected-account__name',
+          '[data-testid="account-menu-icon"]',
         );
         assert.equal(await importedAccountName.getText(), 'Account 4');
 
         // should show the imported label
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         // confirm 4th account is account 4, as expected
-        const accountMenuItemSelector = '.account-menu__account:nth-child(4)';
+        const accountMenuItemSelector =
+          '.multichain-account-list-item:nth-child(4)';
         const fourthAccountName = await driver.findElement(
-          `${accountMenuItemSelector} .account-menu__name`,
+          `${accountMenuItemSelector} .multichain-account-list-item__account-name__button`,
         );
         assert.equal(await fourthAccountName.getText(), 'Account 4');
         // confirm label is present on the same menu item
         const importedLabel = await driver.findElement(
-          `${accountMenuItemSelector} .keyring-label`,
+          `${accountMenuItemSelector} .mm-tag`,
         );
         assert.equal(await importedLabel.getText(), 'IMPORTED');
 
         const accountListItems = await driver.findElements(
-          '.account-menu__account',
+          '.multichain-account-list-item',
         );
         assert.equal(accountListItems.length, 4);
       },
@@ -384,7 +393,7 @@ describe('MetaMask Import UI', function () {
         await driver.press('#password', driver.Key.ENTER);
 
         // choose Import Account from the account menu
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         await driver.clickElement({ text: 'Import account', tag: 'div' });
 
         // enter private key',
@@ -423,9 +432,9 @@ describe('MetaMask Import UI', function () {
         await driver.press('#password', driver.Key.ENTER);
 
         // choose Connect hardware wallet from the account menu
-        await driver.clickElement('.account-menu__icon');
+        await driver.clickElement('[data-testid="account-menu-icon"]');
         await driver.clickElement({
-          text: 'Connect hardware wallet',
+          text: 'Hardware wallet',
           tag: 'div',
         });
         await driver.delay(regularDelayMs);
