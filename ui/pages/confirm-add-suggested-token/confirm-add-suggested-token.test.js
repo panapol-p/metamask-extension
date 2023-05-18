@@ -46,7 +46,7 @@ jest.mock('../../store/actions', () => ({
 const renderComponent = (tokens = []) => {
   const store = configureStore({
     metamask: {
-      suggestedAssets: [...MOCK_SUGGESTED_ASSETS],
+      suggestedTokens: [...MOCK_SUGGESTED_ASSETS],
       tokens,
       providerConfig: { chainId: '0x1' },
     },

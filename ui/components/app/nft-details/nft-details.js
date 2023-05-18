@@ -67,7 +67,6 @@ export default function NftDetails({ nft }) {
     tokenId,
     standard,
     isCurrentlyOwned,
-    isWatched,
     lastSale,
     imageThumbnail,
   } = nft;
@@ -137,7 +136,7 @@ export default function NftDetails({ nft }) {
   };
 
   const renderSendButton = () => {
-    if (isCurrentlyOwned === false || isWatched) {
+    if (isCurrentlyOwned === false) {
       return <div style={{ height: '30px' }} />;
     }
     return (
